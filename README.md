@@ -1,5 +1,7 @@
 # about
 
+[https://github.com/lins05/slackbot](https://github.com/lins05/slackbot)を使っています。
+
 ## 注意
 
 `slackbot_settings.py`は自分で用意してください。
