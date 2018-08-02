@@ -6,7 +6,7 @@ from slackbot.bot import default_reply  # 該当する応答がない場合に�
 
 import requests
 import json
-
+from time import sleep
 
 # 東京の天気（晴れとかだけ）
 @respond_to('東京の天気')
@@ -24,5 +24,7 @@ def respond_simple_tenki_tokyo(message):
     tenki_day_after_tomorrow = json_file['forecasts'][2]['telop']
 
     message.reply('今日の東京は{}です。'.format(tenki_today))
+    sleep(0.1)
     message.reply('明日の東京は{}です。'.format(tenki_tomorrow))
+    sleep(0.1)
     message.reply('明後日の東京は{}です。'.format(tenki_day_after_tomorrow))
