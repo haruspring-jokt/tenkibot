@@ -73,5 +73,4 @@ def respond_description_tokyo(message, city_id):
 
     message.reply(
         title + 'です。\n'
-        + description_text
-    )
+        + description_text)
