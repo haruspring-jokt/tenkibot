@@ -83,12 +83,12 @@ def get_API_KEY():
     with open('openWeatherMap', encoding='utf-8') as API_KEY:
         return API_KEY.read()
 
-# 3時間ごと5日分の東京の天気を返す
+# 現在の東京の天気を返す
 @listen_to('tenki tokyo', re.IGNORECASE)
-def respond_5_day_3_hour_forecast_data_tokyo(message):
+def respond_current_weather_data_tokyo(message):
     API_KEY = get_API_KEY()
     city_name = 'tokyo'
-    api = 'http://api.openweathermap.org/data/2.5/forecast?units=metric&q={city}&APPID={API_KEY}'
+    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={API_KEY}'
 
     url = api.format(city = city_name, API_KEY = API_KEY)
     print('[info] url is {0}'.format(url))
