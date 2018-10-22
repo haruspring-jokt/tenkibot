@@ -75,27 +75,3 @@ def respond_description_tokyo(message, city_id):
     message.reply(
         title + 'です。\n'
         + description_text)
-
-## OpenWeatherMapのAPIを使用
-
-# API keyを取得
-def get_API_KEY():
-    with open('openWeatherMap', encoding='utf-8') as API_KEY:
-        return API_KEY.read()
-
-# 現在の東京の天気を返す
-@listen_to('tenki tokyo', re.IGNORECASE)
-def respond_current_weather_data_tokyo(message):
-    API_KEY = get_API_KEY()
-    city_name = 'tokyo'
-    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={API_KEY}'
-
-    url = api.format(city = city_name, API_KEY = API_KEY)
-    print('[info] url is {0}'.format(url))
-    response = requests.get(url)
-    data = response.json()
-    jsonText = json.dumps(data, indent = 4)
-
-    assert jsonText is not None, '天気情報を正しく取得できませんでした'
-
-    message.send('```{}```'.format(jsonText))
