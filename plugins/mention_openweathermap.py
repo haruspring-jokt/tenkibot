@@ -46,7 +46,7 @@ def respond_current_weather_data_tokyo(message):
 
     print('[info] being called current weather command about [{}].'.format(city_name))
 
-    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={owm_api_key}'
+    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={API_KEY}'
     url = api.format(city = city_name, API_KEY = owm_api_key)
 
     print('[info] url is {0}'.format(url))
