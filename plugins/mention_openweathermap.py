@@ -31,6 +31,10 @@ def respond_help(message):
     ]
     message.send_webapi('', json.dumps(attachments))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> heroku/master
 @listen_to(r"^tenki\s[^-]+")
 def respond_current_weather_data_tokyo(message):
     """
