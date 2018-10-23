@@ -111,3 +111,4 @@ slackbot_settings.py
 
 # original
 openWeatherMap
+API_TOKEN
