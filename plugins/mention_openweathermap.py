@@ -9,12 +9,9 @@ import json
 import re
 import os
 
+# openWeatherMapのAPI_KEYを環境変数から取得
 owm_api_key = os.environ['OWM_API_KEY']
 
-# API keyを取得
-# def get_API_KEY():
-#     with open('openWeatherMap', encoding='utf-8') as API_KEY:
-#         return API_KEY.read()
 
 @listen_to(r"^tenki\s-h|--help")
 def respond_help(message):
@@ -33,6 +30,7 @@ def respond_help(message):
         }
     ]
     message.send_webapi('', json.dumps(attachments))
+
 
 @listen_to(r"^tenki\s[^-]+")
 def respond_current_weather_data_tokyo(message):
