@@ -7,11 +7,14 @@ from slackbot.bot import default_reply  # 該当する応答がない場合に�
 import requests
 import json
 import re
+import os
+
+owm_api_key = os.environ['OWM_API_KEY']
 
 # API keyを取得
-def get_API_KEY():
-    with open('openWeatherMap', encoding='utf-8') as API_KEY:
-        return API_KEY.read()
+# def get_API_KEY():
+#     with open('openWeatherMap', encoding='utf-8') as API_KEY:
+#         return API_KEY.read()
 
 @listen_to(r"^tenki\s-h|--help")
 def respond_help(message):
@@ -37,14 +40,14 @@ def respond_current_weather_data_tokyo(message):
     現在の天気を表示する。
     コマンド: "tenki [city]"
     """
-    api_key = get_API_KEY()
+    # api_key = get_API_KEY()
     
     city_name = message.body['text'].split(" ")[1]
 
     print('[info] being called current weather command about [{}].'.format(city_name))
 
-    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={api_key}'
-    url = api.format(city = city_name, API_KEY = api_key)
+    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={owm_api_key}'
+    url = api.format(city = city_name, API_KEY = owm_api_key)
 
     print('[info] url is {0}'.format(url))
     
