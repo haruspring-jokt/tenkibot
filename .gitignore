@@ -107,8 +107,6 @@ venv.bak/
 .vscode/
 pip-selfcheck.json
 .history/
-slackbot_settings.py
 
 # original
-openWeatherMap
 API_TOKEN

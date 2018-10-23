@@ -37,14 +37,14 @@ def respond_current_weather_data_tokyo(message):
     現在の天気を表示する。
     コマンド: "tenki [city]"
     """
-    API_KEY = get_API_KEY()
+    api_key = get_API_KEY()
     
     city_name = message.body['text'].split(" ")[1]
 
     print('[info] being called current weather command about [{}].'.format(city_name))
 
-    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={API_KEY}'
-    url = api.format(city = city_name, API_KEY = API_KEY)
+    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={api_key}'
+    url = api.format(city = city_name, API_KEY = api_key)
 
     print('[info] url is {0}'.format(url))
     
