@@ -25,7 +25,7 @@ def respond_help(message):
             'fallback': 'tenkibot',
             'author_name': 'tenkibot',
             'author_link': 'https://openweathermap.org/',
-            'text': 'ヘルプメニュー',
+            'text': 'ヘルプメニューを表示します',
             'color': '#59afe1'
         }
     ]
