@@ -13,7 +13,7 @@ import os
 owm_api_key = os.environ['OWM_API_KEY']
 
 
-@listen_to(r"^tenki\s-h|--help")
+@listen_to(r"^tenki\s-h|--help$")
 def respond_help(message):
     """
     ヘルプメニューを表示する。
@@ -31,15 +31,15 @@ def respond_help(message):
     ]
     message.send_webapi('', json.dumps(attachments))
 
-@listen_to(r"^tenki\s[^-]+")
-def respond_current_weather_data_tokyo(message):
+
+@listen_to(r"^tenki\s([^-]+|-c\s[^-]+|--current\s[^-]+)$")
+def respond_current_weather_data(message, something):
     """
-    現在の天気を表示する。
-    コマンド: "tenki [city]"
+    指定された都市に関する現在の天気を表示する。
+    コマンド: "@tenkibot [-c cityname|--current cityname]"
     """
-    # api_key = get_API_KEY()
-    
-    city_name = message.body['text'].split(" ")[1]
+
+    city_name = message.body['text'].split(" ")[-1]
 
     print('[info] being called current weather command about [{}].'.format(city_name))
 
@@ -55,3 +55,28 @@ def respond_current_weather_data_tokyo(message):
         message.send('```都市名が間違っています\n確認してください```')
     elif re.compile(data['name'],re.IGNORECASE).match(city_name):
         message.send('```{}```'.format(data))
+
+
+@listen_to(r"^tenki\s(-5\s[^-]+|--five\s[^-]+)$")
+def respond_three_days_weather_data(message, something):
+    """
+    指定された都市に関する5日間天気を表示する。
+    コマンド: "@tenkibot [-5 cityname|--five cityname]"
+    """
+
+    city_name = message.body['text'].split(" ")[-1]
+
+    print('[info] being called five days weather command about [{}].'.format(city_name))
+
+    api = 'http://api.openweathermap.org/data/2.5/forecast?units=metric&q={city}&APPID={API_KEY}'
+    url = api.format(city = city_name, API_KEY = owm_api_key)
+
+    print('[info] url is {0}'.format(url))
+    
+    response = requests.get(url)
+    data = json.loads(response.text)
+
+    if data['cod'] == '404':
+        message.send('```都市名が間違っています\n確認してください```')
+    elif re.compile(data['city']['name'],re.IGNORECASE).match(city_name):
+        message.send('```{}```'.format(data['city']))
