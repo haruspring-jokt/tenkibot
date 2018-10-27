@@ -106,7 +106,3 @@ venv.bak/
 # vscode
 .vscode/
 pip-selfcheck.json
-.history/
-
-# original
-local_memo/
