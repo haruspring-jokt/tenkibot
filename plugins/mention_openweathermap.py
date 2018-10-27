@@ -12,6 +12,7 @@ import datetime
 
 # openWeatherMapのAPI_KEYを環境変数から取得
 owm_api_key = os.environ['OWM_API_KEY']
+lang = 'ja'
 
 
 @listen_to(r"^tenki\s-h|--help$")
@@ -43,8 +44,8 @@ def respond_current_weather_data(message, something):
     print('[info] being called current weather command about [{}].'.format(
         city_name))
 
-    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={API_KEY}'
-    url = api.format(city=city_name, API_KEY=owm_api_key)
+    api = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q={city}&APPID={API_KEY}&lang={LANG}'
+    url = api.format(city=city_name, API_KEY=owm_api_key, LANG=lang)
 
     print('[info] url is {0}'.format(url))
 
@@ -71,8 +72,8 @@ def respond_three_days_weather_data(message, something):
     print('[info] being called five days weather command about [{}].'.format(
         city_name))
 
-    api = 'http://api.openweathermap.org/data/2.5/forecast?units=metric&q={city}&APPID={API_KEY}'
-    url = api.format(city=city_name, API_KEY=owm_api_key)
+    api = 'http://api.openweathermap.org/data/2.5/forecast?units=metric&q={city}&APPID={API_KEY}&lang={LANG}'
+    url = api.format(city=city_name, API_KEY=owm_api_key, LANG=lang)
 
     print('[info] url is {0}'.format(url))
 

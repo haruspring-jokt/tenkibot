@@ -97,3 +97,17 @@ http://api.openweathermap.org/data/2.5/weather?units=metric&q=tokyo&APPID={xxxxx
 
 > - visibility 
 >     - visibility.value Visibility, meter **視程**
+
+## 5 day / 3 hour forecast data
+
+以下のリクエストで取得。
+
+```
+http://api.openweathermap.org/data/2.5/forecast?units=metric&q={city}&APPID={API_KEY}
+```
+
+### jsonの読み方
+
+jsonサンプルは .\sanple\5_day_3_hour_forecast_data.json を参照
+
+
