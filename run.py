@@ -2,6 +2,7 @@
 
 from slackbot.bot import Bot
 import datetime
+from template import tenkibot_template
 
 def main():
     bot = Bot()
