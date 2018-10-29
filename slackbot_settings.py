@@ -6,7 +6,7 @@ import os
 DEFAULT_REPLY = "`tenki -h` で主な使い方を表示します。"
 
 # プラグインスクリプトを置いてあるサブディレクトリ名のリスト
-PLUGINS = ['plugins']
+PLUGINS = ['template']
 
 # ローカルで動かす場合はここにslackbotを利用するためのトークンを記述する
 # Herokuにデプロイしているため環境変数から取得

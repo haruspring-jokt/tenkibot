@@ -5,11 +5,42 @@
 
 import datetime
 from repository import openweathermap
+import json
+
+
+def make_help_message():
+    attachments = [{
+        'fallback': 'tenkibot',
+        'author_name': 'tenkibot',
+        'author_link': 'https://openweathermap.org/',
+        'text': 'ヘルプメニューを表示します',
+        'color': '#59afe1'
+    }]
+    return json.dumps(attachments)
+
+
+def cod_check(data):
+    """
+    ステータスをチェックする。
+    """
+    return data['cod']
 
 
 def make_current_weather_message(city_name):
+    """
+    現在の天気メッセージを作成する。
+    """
     data = openweathermap.fetch_current_weather_data(city_name)
     post_message = create_current_weather_message(data)
+    return post_message
+
+
+def make_5_days_weather_message(city_name):
+    """
+    5日間予報のメッセージを取得する。
+    """
+    data = openweathermap.fetch_5_days_weather_data(city_name)
+    post_message = create_5_days_forecast_message(data)
     return post_message
 
 
@@ -17,6 +48,9 @@ def create_current_weather_message(data):
     """
     jsonをロードしたデータを読み、投稿用メッセージを作成する。
     """
+
+    if cod_check(data) == '404':
+        return '```都市名が間違っています```'
 
     # jsonから取得
     weather = data['weather'][0]
@@ -72,10 +106,13 @@ def create_current_weather_message(data):
     return post_message
 
 
-def create_5_day_per_6_hour_forecast_message(data):
+def create_5_days_forecast_message(data):
     """
     jsonをロードしたデータを読み、投稿用メッセージを作成する。
     """
+
+    if cod_check(data) == '404':
+        return '```都市名が間違っています```'
 
     # jsonから取得
     full_list = data['list']
@@ -91,7 +128,7 @@ def create_5_day_per_6_hour_forecast_message(data):
             forecast['dt']).strftime('%m/%d %H') + '時'
         post['temp'] = round(forecast['main']['temp'], 1)
         post['weather'] = forecast['weather'][0]['description']
-        if '3h' in forecast['rain']:
+        if 'rain' in forecast and '3h' in forecast['rain']:
             post['rain'] = round(forecast['rain']['3h'], 2)
         else:
             post['rain'] = ''
@@ -104,18 +141,18 @@ def create_5_day_per_6_hour_forecast_message(data):
 
     # 投稿用の予報リストをメッセージに追加
     for post in post_list:
-        post_message = post_message + str(post['dt'])
-        post_message = post_message + ' | '
-        post_message = post_message + str(post['temp'])
-        post_message = post_message + ' | '
-        post_message = post_message + str(post['weather'])
-        post_message = post_message + ' | '
-        post_message = post_message + str(post['rain'])
-        post_message = post_message + '\n'
+        post_message += str(post['dt'])
+        post_message += ' | '
+        post_message += str(post['temp'])
+        post_message += ' | '
+        post_message += str(post['weather'])
+        post_message += ' | '
+        post_message += str(post['rain'])
+        post_message += '\n'
 
     # リンクの追加
     city_id = data['city']['id']
-    post_message = post_message + '詳しくはhttps://openweathermap.org/city/{id} をご覧ください。'.format(
+    post_message += '詳しくはhttps://openweathermap.org/city/{id} をご覧ください。'.format(
         id=city_id)
 
     return post_message
