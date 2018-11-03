@@ -10,7 +10,7 @@ import datetime
 def create_5_days_weather_graph(data):
     """
     5日間の天気予報データをグラフ化する。
-    作成した画像を出力値として返す。
+    作成した画像のファイルパスを出力値として返す。
     """
 
     # jsonから気温データを取得してリスト化する
@@ -36,10 +36,15 @@ def create_5_days_weather_graph(data):
     city_name = data['city']['name']
 
     plt.plot(dt_list, temp_list)
-    plt.title("5 days forecast in {}".format(city_name)) # 都市名を入れる
+    plt.title("5 days forecast in {}".format(city_name))  # 都市名を入れる
     plt.xlabel("datetime")
     plt.ylabel("temperature (℃)")
-    plt.show()
+    # plt.show()
 
-    image = None
-    return image
+    now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
+    img_filepath = 'tmp/5_days_weather_graph_{}.png'.format(now)
+
+    plt.savefig(img_filepath)
+    print('[info] graph image saved. filename=[{}]'.format(img_filepath))
+
+    return img_filepath
