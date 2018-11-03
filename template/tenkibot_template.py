@@ -18,7 +18,7 @@ def post_help(message):
     print('[info] being called help command.')
     attachments = tenkibot_service.make_help_message()
     message.send_webapi('', attachments)
-    
+
 
 def post_not_found_city(message):
     message.send("```都市名が間違っています```")
@@ -52,3 +52,20 @@ def post_five_days_weather_data(message, option, city_name):
     """
     post_message = tenkibot_service.make_5_days_weather_message(city_name)
     message.send('{}'.format(post_message))
+
+
+@listen_to(r"^tenki\s(-g\s|--graph\s)(.*)$")
+def post_five_days_weather_graph(message, option, city_name):
+    """
+    指定された都市に関する5日間の天気予報をグラフ付きで表示する。
+    コマンド: "@tenkibot [-g cityname|--graph cityname]"
+    """
+    print('[info] listen to message. text=[{0}],'.format(message.body['text']))
+    print('[info] being called graph command.')
+
+    # 投稿されたチャネルをIDで取得する
+    channel = message.body['channel']
+    result = tenkibot_service.upload_5_days_weather_graph(city_name, channel)
+
+    if result == True:
+        print('[info] finish service in safe.')
