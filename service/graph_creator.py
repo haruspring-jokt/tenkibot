@@ -36,20 +36,29 @@ def create_5_days_weather_graph(data):
     city_name = data['city']['name']
 
     # グラフの新規作成（初期化）
-    plt.figure()
-
-    plt.plot(dt_list, temp_list)
+    plt.figure(figsize=(16, 9), dpi=150)
+    # データ入力
+    plt.plot(dt_list, temp_list, label="temperature", marker='o')
+    # グラフのヘッダーに表示するタイトルの設定
     plt.title("5 days forecast in {}".format(city_name))  # 都市名を入れる
+    # x軸のラベル名の設定
     plt.xlabel("datetime")
+    plt.xticks(rotation=45)
+    # y軸のラベル名の設定
     plt.ylabel("temperature (℃)")
-    # plt.show()
-
-    now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
-    img_filepath = './tmp/5_days_weather_graph_{}.png'.format(now)
+    # 凡例の設定
+    plt.legend()
+    # グリッド
+    plt.grid(which='major',color='#CEECEF',linestyle='-',)
+    plt.grid(which='minor',color='#CEECEF',linestyle='-')
 
     # グラフを.pngファイルとして保存する
-    # 'tmp'フォルダを事前に作成しておくこと
+    # 'tmp'フォルダを事前に作成しておく必要がある
+    # TODO 'tmp'フォルダが無かったら作成するくらい気を効かせたい
+    now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
+    img_filepath = './tmp/5_days_weather_graph_{}.png'.format(now)
     plt.savefig(img_filepath)
+
     print('[info] graph image saved. filename=[{}]'.format(img_filepath))
 
     return img_filepath
