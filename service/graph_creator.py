@@ -35,6 +35,9 @@ def create_5_days_weather_graph(data):
 
     city_name = data['city']['name']
 
+    # グラフの新規作成（初期化）
+    plt.figure()
+
     plt.plot(dt_list, temp_list)
     plt.title("5 days forecast in {}".format(city_name))  # 都市名を入れる
     plt.xlabel("datetime")
