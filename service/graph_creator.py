@@ -42,8 +42,10 @@ def create_5_days_weather_graph(data):
     # plt.show()
 
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
-    img_filepath = 'tmp/5_days_weather_graph_{}.png'.format(now)
+    img_filepath = './tmp/5_days_weather_graph_{}.png'.format(now)
 
+    # グラフを.pngファイルとして保存する
+    # 'tmp'フォルダを事前に作成しておくこと
     plt.savefig(img_filepath)
     print('[info] graph image saved. filename=[{}]'.format(img_filepath))
 

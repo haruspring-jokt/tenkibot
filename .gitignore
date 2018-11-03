@@ -108,4 +108,4 @@ venv.bak/
 pip-selfcheck.json
 
 # original
-tmp/
+# tmp/
