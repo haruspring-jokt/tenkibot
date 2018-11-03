@@ -5,6 +5,10 @@
 
 import datetime
 from repository import openweathermap
+from service import graph_creator
+from service import slack_uploader
+from service import slack_messenger
+from service import os_manager
 import json
 
 
@@ -42,6 +46,46 @@ def make_5_days_weather_message(city_name):
     data = openweathermap.fetch_5_days_weather_data(city_name)
     post_message = create_5_days_forecast_message(data)
     return post_message
+
+
+def upload_5_days_weather_graph(city_name, channels):
+    """
+    5日間予報のグラフ付きメッセージを取得する。
+    city_name: 天気データを取得する都市名
+    channels: 投稿するチャネルのID
+    """
+
+    print('[info] called service method. name=[upload_5_days_weather_graph]')
+
+    # OWMのAPIから天気予報JSONデータを取得する
+    data = openweathermap.fetch_5_days_weather_data(city_name)
+
+    # 取得結果チェック
+    if cod_check(data) != '200':
+        slack_messenger.post('```天気データが正しく取得できませんでした```', channels)
+        return False
+
+    # データを渡してグラフ画像のファイルパスをもらう
+    img_filepath = graph_creator.create_5_days_weather_graph(data)
+    
+    # 画像を投稿する
+    up_result = slack_uploader.upload_image(
+        img_filepath,
+        channels,
+        initial_comment='uploaded forecast graph in {}'.format(city_name),
+        title='5 days forecast in {}'.format(city_name))
+
+    # 結果を取得
+    if up_result == False:
+        slack_messenger.post('```天気データが正しく取得できませんでした```', channels)
+        return False
+
+    # アップロード完了後画像を削除する
+    os_manager.remove_file(img_filepath)
+
+    print('[info] finish service method. name=[upload_5_days_weather_graph]')
+
+    return True
 
 
 def create_current_weather_message(data):
