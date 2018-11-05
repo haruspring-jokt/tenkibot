@@ -29,10 +29,10 @@ def create_5_days_weather_graph(data):
     city_name = data['city']['name']
 
     # 気温のみのグラフを作成する
-    img_filepath = create_temp_only_gragh(element_list, city_name)
+    # img_filepath = create_temp_only_gragh(element_list, city_name)
 
     # 気温と湿度のグラフを作成する
-    # img_filepath = create_temp_and_humid_graph(element_list, city_name)
+    img_filepath = create_temp_and_humid_graph(element_list, city_name)
 
     return img_filepath
 
@@ -84,5 +84,46 @@ def create_temp_and_humid_graph(element_list, city_name):
     気温と湿度の2軸が共存するグラフを作成する。
     """
 
-    img_filepath = ''
+    # グラフ入力用データ
+    # 日付のリスト作成
+    dt_list = [i['dt'] for i in element_list]
+    # 気温のリスト作成
+    temp_list = [i['temp'] for i in element_list]
+    # 湿度のリスト
+    humid_list = [i['humidity'] for i in element_list]
+    # 都市名
+    city_name = city_name
+
+    # 1つのグラフに二重のプロットを表示する
+    plt.figure()
+    fig, ax_temp = plt.subplots(figsize=(16, 9), dpi=150)
+
+    # 1つめ、気温のグラフ
+    color = 'tab:blue'
+    ax_temp.set_xlabel('datetime')
+    ax_temp.set_xticklabels(dt_list, rotation=45)
+    ax_temp.set_ylabel('temperature (℃)', color=color)
+    ax_temp.plot(dt_list, temp_list, label='temperature', marker='o', color=color)
+    ax_temp.tick_params(axis='y', labelcolor=color)
+
+    # 2つめ、湿度のグラフ
+    ax_humid = ax_temp.twinx()
+    color = 'tab:red'
+    ax_humid.set_ylabel('humidity (%)', color=color)
+    ax_humid.plot(dt_list, humid_list, label='humidity', marker='^', color=color)
+    ax_humid.tick_params(axis='y', labelcolor=color)
+
+    fig.tight_layout() # otherwise the right y-label is slightly clipped
+
+    # グラフのヘッダーに表示するタイトルの設定
+    plt.title("5 days forecast in {}".format(city_name))  # 都市名を入れる
+
+    # グラフを.pngファイルとして保存する
+    # 'tmp'フォルダを事前に作成しておく必要がある
+    now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
+    img_filepath = './tmp/5_days_weather_graph_{}.png'.format(now)
+    plt.savefig(img_filepath)
+
+    print('[info] graph image saved. filename=[{}]'.format(img_filepath))
+
     return img_filepath
