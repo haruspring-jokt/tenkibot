@@ -34,6 +34,9 @@ def create_5_days_weather_graph(data):
     # 気温と湿度のグラフを作成する
     img_filepath = create_temp_and_humid_graph(element_list, city_name)
 
+    # TODO 気温（折れ線）と降水量（棒グラフ）のグラフを作成する
+    # img_filepath = create_temp_and_rain_graph(data, city_name)
+
     return img_filepath
 
 
@@ -72,7 +75,7 @@ def create_temp_only_gragh(element_list, city_name):
     # TODO 'tmp'フォルダが無かったら作成するくらい気を効かせたい
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
     img_filepath = './tmp/5_days_weather_graph_{}.png'.format(now)
-    plt.savefig(img_filepath)
+    plt.savefig(img_filepath, bbox_inches='tight')
 
     print('[info] graph image saved. filename=[{}]'.format(img_filepath))
 
@@ -122,7 +125,7 @@ def create_temp_and_humid_graph(element_list, city_name):
     # 'tmp'フォルダを事前に作成しておく必要がある
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
     img_filepath = './tmp/5_days_weather_graph_{}.png'.format(now)
-    plt.savefig(img_filepath)
+    plt.savefig(img_filepath, bbox_inches='tight')
 
     print('[info] graph image saved. filename=[{}]'.format(img_filepath))
 
