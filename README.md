@@ -1,26 +1,26 @@
 # about
 
-[https://github.com/lins05/slackbot](https://github.com/lins05/slackbot)を使っています。
+受け取ったメッセージに従って天気の情報を表示してくれるslackbotです。
 
-## 注意
+## Slackbotフレームワーク
 
-`slackbot_settings.py`は自分で用意してください。
+- [slackbot](https://github.com/lins05/slackbot)
+    - メッセージの受け取り、サービスへのディスパッチに使用
+- [python-slackclient](https://github.com/slackapi/python-slackclient)
+    - botからのメッセージ送信、画像のアップロードなどに使用
 
-```python
-# coding: utf-8
+## 使用できるコマンド
 
-# botアカウントのトークンを指定
-API_TOKEN = "{トークンをコピペ}"
+- `tenki <cityname（都市名）>`
+    - その都市に関する現在の天気情報を表示します。`tenki -c <cityname（都市名）>`でもOKです。また、`-c`の代わりに`--current`を使用することもできます。
+    - ![](img/2018-11-07-23-37-04.png)
+- `tenki [-5 | --five] <cityname（都市名）>`
+    - その都市に関する5日間の天気情報を表示します。
+    - ![](img/2018-11-07-23-40-52.png)
+- `tenki [-g | --graph] <cityname（都市名）>`
+    - その都市に関する5日間の気温と降水量をグラフで表示します。
+    - ![](img/2018-11-07-23-41-59.png)
 
-# このbot宛のメッセージで、どの応答にも当てはまらない場合の応答文字列
-DEFAULT_REPLY = "`@tenkibot 使い方` でコマンド一覧を表示します。"
+### 都市名について
 
-# プラグインスクリプトを置いてあるサブディレクトリ名のリスト
-PLUGINS = ['plugins']
-```
-
-## 対応地域
-
-会社のSlackチャネルで使用することを前提にしているため、現在は東京にしか対応していません。
-
-順次全国の天気を取得できるような機能追加を考えています。
+天気情報は [OpenWeatherMap](https://openweathermap.org/)から取得しています。そのため、都市名はここに登録されている表記で入力する必要があります。ただし、`chiba`と`chiba-shi`はどちらも千葉市を取得してくれたりと様々なようです。
