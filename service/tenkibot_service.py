@@ -67,7 +67,7 @@ def upload_5_days_weather_graph(city_name, channels):
 
     # データを渡してグラフ画像のファイルパスをもらう
     img_filepath = graph_creator.create_5_days_weather_graph(data)
-    
+
     # 画像を投稿する
     up_result = slack_uploader.upload_image(
         img_filepath,
@@ -131,7 +131,7 @@ def create_current_weather_message(data):
 気温: {temp} ℃
 気圧: {pressure} hPa
 湿度: {humid} %
-風速と風向: {speed} m/s、{deg} 
+風速と風向: {speed} m/s、{deg}
 雲量: {cloud} %
 詳しくは https://openweathermap.org/city/{id} をご覧ください。
     """.format(
