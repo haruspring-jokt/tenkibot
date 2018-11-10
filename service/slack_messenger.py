@@ -6,14 +6,14 @@ Slackへメッセージを投稿するモジュール
 from slackclient import SlackClient
 import os
 
-slack_token = os.environ['SLACKBOT_API_TOKEN']
+SLACK_TOKEN = os.environ['SLACKBOT_API_TOKEN']
 
 
 def post(message, channel):
     """
     Slackチャネルにテキストメッセージを投稿する。
     """
-    sc = SlackClient(slack_token)
+    sc = SlackClient(SLACK_TOKEN)
 
     sc.api_call(
         "chat.postMessage",

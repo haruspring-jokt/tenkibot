@@ -20,4 +20,5 @@ def post_folio_summary(message):
     # message.send("```folio```")
     print('[info] listen to message. text=[{0}],'.format(message.body['text']))
     message.send('{}'.format("FOLIOから資産概要を取得します…"))
-    folio_service.send_folio_sammary()
+    channel = message.body['channel']
+    folio_service.send_folio_sammary(channel)
