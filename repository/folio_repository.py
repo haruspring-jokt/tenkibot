@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
 import time
+import re
 
 CHROME_BINARY_LOCATION = os.environ['CHROME_BINARY_LOCATION']
 CHROME_DRIVER_PATH = os.environ['CHROME_DRIVER_PATH']
@@ -33,6 +34,7 @@ def fetch_sammary():
     print(sammary)
 
     return sammary
+
 
 def setup_webdriver():
 
@@ -74,24 +76,39 @@ def login(driver, mailadress, password):
 
 
 def get_total(driver):
-    element = driver.find_element_by_xpath('//*[@id="portal-target"]/header[2]/div/div[1]/div/div[1]/div[2]/span')
-    return element.text
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/header[2]/div/div[1]/div/div[1]/div[2]/span')
+    total = int(re.sub(r'[¥|,]', '', element.text))
+    return total
 
 
 def get_gains(driver):
     gains = {}
-    element = driver.find_element_by_xpath('//*[@id="portal-target"]/header[2]/div/div[1]/div/div[2]/div[1]/span')
-    gains['rate'] = element.text
-    element = driver.find_element_by_xpath('//*[@id="portal-target"]/header[2]/div/div[1]/div/div[2]/div[2]/span[2]')
-    gains['amount'] = element.text
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/header[2]/div/div[1]/div/div[2]/div[1]/span')
+    rate = float(re.sub(r'[（|）|%]', '', element.text)) / 100
+    gains['rate'] = rate
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/header[2]/div/div[1]/div/div[2]/div[2]/span[2]'
+    )
+    amount = int(re.sub(r'[¥|,]', '', element.text))
+    gains['amount'] = amount
 
     return gains
 
+
 def get_previous_day(driver):
     previous_day = {}
-    element = driver.find_element_by_xpath('//*[@id="portal-target"]/header[2]/div/div[1]/div/div[3]/div[1]/span')
-    previous_day['rate'] = element.text
-    element = driver.find_element_by_xpath('//*[@id="portal-target"]/header[2]/div/div[1]/div/div[3]/div[2]/span[2]')
-    previous_day['amount'] = element.text
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/header[2]/div/div[1]/div/div[3]/div[1]/span')
+    rate = float(re.sub(r'[（|）|%]', '', element.text)) / 100
+    previous_day['rate'] = rate
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/header[2]/div/div[1]/div/div[3]/div[2]/span[2]'
+    )
+    amount = int(re.sub(r'[¥|,]', '', element.text))
+    previous_day['amount'] = amount
 
     return previous_day

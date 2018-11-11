@@ -9,7 +9,7 @@ import os
 SLACK_TOKEN = os.environ['SLACKBOT_API_TOKEN']
 
 
-def post(message, channel):
+def post(message, channel, as_user=True):
     """
     Slackチャネルにテキストメッセージを投稿する。
     """
@@ -19,4 +19,4 @@ def post(message, channel):
         "chat.postMessage",
         channel=channel,
         text=message,
-        as_user=True)
+        as_user=as_user)
