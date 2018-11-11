@@ -90,6 +90,23 @@ slackにも追加通知が来る。
 
 よくわからないので一旦保留…
 
+## Heroku Scheduler を使う
+
+定期実行するためのアドオン。これを利用してSlackに定期的な通知を送ることができる。参考ページ: [【Heroku】無料プランの Sleep を回避する](https://www.shookuro.com/entry/2018/05/05/112133)
+
+アドオンを追加する。GUI上でもできるはず。
+
+```bash
+heroku addons:create scheduler:standard
+heroku addons:open scheduler
+```
+
+アドオンを`open`すると設定画面が表示されるので、実行するコマンドとスケジュールを入力する。
+
+![](img/2018-11-11-17-49-15.png)
+
+上のコマンドが定期実行用、下は`Sleep`を回避するためのコマンド。ただ、今はtenkibotのアプリケーショントップ画面を用意していないので、`503`エラーが返ってきてしまう。とはいえスリープを防げればいいのでOK。
+
 # git関係
 
 ## マージ時に`fatal: refusing to merge unrelated histories`が表示された場合
@@ -158,8 +175,14 @@ Deleted branch issue1 (was b2b23c4).
 
 現在、以下のパラメータを環境変数で管理中（ローカルとHerokuともに）
 
+メールアドレスとパスワードについては環境変数に置くのもアレ、またユーザが複数になった場合対応できないので、DBを用いて管理することが必要になってくると思う（この場合、DBへの情報登録などやることが多くなってくるんだけど...）。
+
 - slackbotのトークン
 - openWeatherMapのAPIキー
+- chromeのバイナリー
+- chromeのwebdriver（selenium用）
+- FOLIOのメールアドレス
+- FOLIOのパスワード
 
 # slackbot
 
