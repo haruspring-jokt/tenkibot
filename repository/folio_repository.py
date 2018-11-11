@@ -31,7 +31,8 @@ def fetch_sammary():
     sammary['gains'] = get_gains(driver)
     sammary['previous_day'] = get_previous_day(driver)
 
-    print(sammary)
+    print('[info] fetched summary data: '.format(sammary))
+    sammary['status'] = 'OK'
 
     return sammary
 
