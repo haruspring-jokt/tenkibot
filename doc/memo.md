@@ -32,6 +32,12 @@ heroku logs --tail
 heroku restart
 ```
 
+## sshログイン
+
+```bash
+heroku run bash
+```
+
 ## Herokuに必要なファイル
 
 以下をそれぞれルート直下に追加する。
@@ -112,6 +118,40 @@ git remote set-url origin {new url}
 
 ```bash
 git remote add origin https://github.com/haruspring-jokt/tenkibot.git
+```
+
+## ブランチ関連
+
+### ブランチの作成
+
+```bash
+$ git branch <branchname>
+```
+
+## リモートからpull
+
+```bash
+git pull origin master
+```
+
+### merge
+
+developでの変更を取り込むために、まずmasterへ移動してからmergeする
+
+```bash
+$ git checkout master
+Switched to branch 'master'
+```
+
+```bash
+git merge issue1
+```
+
+### ブランチの削除
+
+```bash
+$ git branch -d issue1
+Deleted branch issue1 (was b2b23c4).
 ```
 
 # 環境変数
