@@ -10,7 +10,7 @@ print('[info] {0} foliodaily is running.'.format(timestamp))
 channel = 'CADLS0Y6N'
 
 slack_messenger.post(
-        "FOLIOから資産概要を取得します…",
+        "【定期】FOLIOから資産概要を取得します…",
         channel,
         as_user=False,
         icon_emoji=':moneybag:',
