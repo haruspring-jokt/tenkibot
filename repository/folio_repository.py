@@ -13,6 +13,8 @@ FOLIO_PASS = os.environ['FOLIO_PASS']
 
 
 def fetch_sammary():
+    """資産概要を辞書型で返す
+    """
 
     sammary = {}
 
@@ -35,6 +37,60 @@ def fetch_sammary():
     sammary['status'] = 'OK'
 
     return sammary
+
+
+def fetch_theme():
+    """テーマの資産に関するデータを辞書型で返す
+    """
+
+    theme = {}
+
+    # webdriverをセットアップしブラウザを起動する。
+    driver = setup_webdriver()
+    time.sleep(2)
+    #トップ画面に遷移する
+    driver.get('https://folio-sec.com/')
+    # ログインして会員用トップ画面に遷移する
+    login(driver, FOLIO_MAIL, FOLIO_PASS)
+    time.sleep(2)
+    # 財産管理トップ画面へ遷移する。
+    driver.get('https://folio-sec.com/mypage/assets')
+
+    theme['deposit'] = get_theme_deposit(driver)
+    theme['gains'] = get_theme_gains(driver)
+    theme['previous_day'] = get_theme_previous_day(driver)
+
+    print('[info] fetched theme data: '.format(theme))
+    theme['status'] = 'OK'
+
+    return theme
+
+
+def fetch_roboad():
+    """おまかせの資産に関するデータを辞書型で返す
+    """
+
+    roboad = {}
+
+    # webdriverをセットアップしブラウザを起動する。
+    driver = setup_webdriver()
+    time.sleep(2)
+    #トップ画面に遷移する
+    driver.get('https://folio-sec.com/')
+    # ログインして会員用トップ画面に遷移する
+    login(driver, FOLIO_MAIL, FOLIO_PASS)
+    time.sleep(2)
+    # おまかせの資産画面へ遷移する。
+    driver.get('https://folio-sec.com/mypage/assets/omakase')
+
+    roboad['deposit'] = get_roboad_deposit(driver)
+    roboad['gains'] = get_roboad_gains(driver)
+    roboad['previous_day'] = get_roboad_previous_day(driver)
+
+    print('[info] fetched roboad data: '.format(roboad))
+    roboad['status'] = 'OK'
+
+    return roboad
 
 
 def setup_webdriver():
@@ -108,6 +164,90 @@ def get_previous_day(driver):
 
     element = driver.find_element_by_xpath(
         '//*[@id="portal-target"]/header[2]/div/div[1]/div/div[3]/div[2]/span[2]'
+    )
+    amount = int(re.sub(r'[¥|,]', '', element.text))
+    previous_day['amount'] = amount
+
+    return previous_day
+
+
+def get_theme_deposit(driver):
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div/div[1]/p'
+    )
+    deposit = int(re.sub(r'[¥|,]', '', element.text))
+    return deposit
+
+
+def get_theme_gains(driver):
+    gains = {}
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div/div[2]/h3/span'
+    )
+    rate = float(re.sub(r'[（|）|%]', '', element.text)) / 100
+    gains['rate'] = rate
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div/div[2]/p'
+    )
+    amount = int(re.sub(r'[¥|,]', '', element.text))
+    gains['amount'] = amount
+
+    return gains
+
+
+def get_theme_previous_day(driver):
+    previous_day = {}
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div/div[3]/h3/span'
+    )
+    rate = float(re.sub(r'[（|）|%]', '', element.text)) / 100
+    previous_day['rate'] = rate
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div/div[3]/p'
+    )
+    amount = int(re.sub(r'[¥|,]', '', element.text))
+    previous_day['amount'] = amount
+
+    return previous_day
+
+
+def get_roboad_deposit(driver):
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[1]/p'
+    )
+    deposit = int(re.sub(r'[¥|,]', '', element.text))
+    return deposit
+
+
+def get_roboad_gains(driver):
+    gains = {}
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[2]/h3/span'
+    )
+    rate = float(re.sub(r'[（|）|%]', '', element.text)) / 100
+    gains['rate'] = rate
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[2]/p'
+    )
+    amount = int(re.sub(r'[¥|,]', '', element.text))
+    gains['amount'] = amount
+
+    return gains
+
+
+def get_roboad_previous_day(driver):
+    previous_day = {}
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[3]/h3/span'
+    )
+    rate = float(re.sub(r'[（|）|%]', '', element.text)) / 100
+    previous_day['rate'] = rate
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[3]/p'
     )
     amount = int(re.sub(r'[¥|,]', '', element.text))
     previous_day['amount'] = amount

@@ -12,3 +12,6 @@ PLUGINS = ['template']
 # Herokuにデプロイしているため環境変数から取得
 # API_TOKEN = "hogehoge"
 API_TOKEN = os.environ['SLACKBOT_API_TOKEN']
+
+# テスト用チャネル（#9_test）
+CHANNEL_9_TEST = 'CADLS0Y6N'
