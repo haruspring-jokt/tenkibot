@@ -36,6 +36,8 @@ def fetch_sammary():
     print('[info] fetched summary data: '.format(sammary))
     sammary['status'] = 'OK'
 
+    driver.quit()
+
     return sammary
 
 
@@ -62,6 +64,8 @@ def fetch_theme():
 
     print('[info] fetched theme data: '.format(theme))
     theme['status'] = 'OK'
+
+    driver.quit()
 
     return theme
 
@@ -90,6 +94,8 @@ def fetch_roboad():
     print('[info] fetched roboad data: '.format(roboad))
     roboad['status'] = 'OK'
 
+    driver.quit()
+
     return roboad
 
 
@@ -97,14 +103,22 @@ def setup_webdriver():
 
     options = Options()
     options.binary_location = CHROME_BINARY_LOCATION
+
     # headlessにする場合は以下の2行についてコメントアウトを外します
     options.add_argument('--headless')
+    options.add_argument('--start-maximized')
+
+    options.add_argument('disable-infobars')
+    options.add_argument('--disable-extensions')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-gpu')
     driver = webdriver.Chrome(
         options=options, executable_path=CHROME_DRIVER_PATH)
 
     # ドライバが設定されるまでの待ち時間を設定
     driver.implicitly_wait(10)
+    driver.set_page_load_timeout(60)
 
     return driver
 
@@ -215,8 +229,7 @@ def get_theme_previous_day(driver):
 
 def get_roboad_deposit(driver):
     element = driver.find_element_by_xpath(
-        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[1]/p'
-    )
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[1]/p')
     deposit = int(re.sub(r'[¥|,]', '', element.text))
     return deposit
 
@@ -230,8 +243,7 @@ def get_roboad_gains(driver):
     gains['rate'] = rate
 
     element = driver.find_element_by_xpath(
-        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[2]/p'
-    )
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[2]/p')
     amount = int(re.sub(r'[¥|,]', '', element.text))
     gains['amount'] = amount
 
@@ -247,8 +259,7 @@ def get_roboad_previous_day(driver):
     previous_day['rate'] = rate
 
     element = driver.find_element_by_xpath(
-        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[3]/p'
-    )
+        '//*[@id="portal-target"]/main/section/section[1]/div/div[1]/div[3]/p')
     amount = int(re.sub(r'[¥|,]', '', element.text))
     previous_day['amount'] = amount
 
