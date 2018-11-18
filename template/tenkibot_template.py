@@ -28,7 +28,7 @@ def post_not_found_city(message):
 def post_current_weather_data_with_option(message, option, city_name):
     """
     指定された都市に関する現在の天気を表示する。
-    コマンド: "@tenkibot [-c cityname|--current cityname]"
+    コマンド: "tenki [-c cityname|--current cityname]"
     """
     post_message = tenkibot_service.make_current_weather_message(city_name)
     message.send('{}'.format(post_message))
@@ -38,7 +38,7 @@ def post_current_weather_data_with_option(message, option, city_name):
 def post_current_weather_data(message, city_name):
     """
     指定された都市に関する現在の天気を表示する。
-    コマンド: "@tenkibot [cityname]"
+    コマンド: "tenki [cityname]"
     """
     post_message = tenkibot_service.make_current_weather_message(city_name)
     message.send('{}'.format(post_message))
@@ -48,7 +48,7 @@ def post_current_weather_data(message, city_name):
 def post_five_days_weather_data(message, option, city_name):
     """
     指定された都市に関する5日間の天気予報を表示する。
-    コマンド: "@tenkibot [-5 cityname|--five cityname]"
+    コマンド: "tenki [-5 cityname|--five cityname]"
     """
     post_message = tenkibot_service.make_5_days_weather_message(city_name)
     message.send('{}'.format(post_message))
@@ -58,7 +58,7 @@ def post_five_days_weather_data(message, option, city_name):
 def post_five_days_weather_graph(message, option, city_name):
     """
     指定された都市に関する5日間の天気予報をグラフ付きで表示する。
-    コマンド: "@tenkibot [-g cityname|--graph cityname]"
+    コマンド: "tenki [-g cityname|--graph cityname]"
     """
     print('[info] listen to message. text=[{0}],'.format(message.body['text']))
     print('[info] being called graph command.')

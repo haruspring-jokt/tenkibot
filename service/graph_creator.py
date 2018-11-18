@@ -98,8 +98,6 @@ def create_temp_and_humid_graph(element_list, city_name):
     temp_list = [i['temp'] for i in element_list]
     # 湿度のリスト
     humid_list = [i['humidity'] for i in element_list]
-    # 都市名
-    city_name = city_name
 
     # 1つのグラフに二重のプロットを表示する
     plt.figure()
@@ -166,8 +164,6 @@ def create_temp_and_rain_graph(data):
     temp_list = [i['temp'] for i in element_list]
     # 湿度のリスト
     rain_list = [i['rain'] for i in element_list]
-    # 都市名
-    city_name = city_name
 
     # 1つのグラフに二重のプロットを表示する
     plt.figure()

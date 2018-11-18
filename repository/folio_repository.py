@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 import os
 import time
 import re
+import datetime
 
 CHROME_BINARY_LOCATION = os.environ['CHROME_BINARY_LOCATION']
 CHROME_DRIVER_PATH = os.environ['CHROME_DRIVER_PATH']
@@ -33,8 +34,8 @@ def fetch_sammary():
     sammary['gains'] = get_gains(driver)
     sammary['previous_day'] = get_previous_day(driver)
 
-    print('[info] fetched summary data: '.format(sammary))
     sammary['status'] = 'OK'
+    print('[info] fetched summary data: '.format(sammary))
 
     driver.quit()
 
@@ -62,8 +63,8 @@ def fetch_theme():
     theme['gains'] = get_theme_gains(driver)
     theme['previous_day'] = get_theme_previous_day(driver)
 
-    print('[info] fetched theme data: '.format(theme))
     theme['status'] = 'OK'
+    print('[info] fetched theme data: '.format(theme))
 
     driver.quit()
 
@@ -91,12 +92,47 @@ def fetch_roboad():
     roboad['gains'] = get_roboad_gains(driver)
     roboad['previous_day'] = get_roboad_previous_day(driver)
 
-    print('[info] fetched roboad data: '.format(roboad))
     roboad['status'] = 'OK'
+    print('[info] fetched roboad data: {}'.format(roboad))
 
     driver.quit()
 
     return roboad
+
+
+def fetch_graph_images():
+    """テーマの資産・おまかせの資産の推移グラフ画像を取得し保存する
+    """
+
+    result = {'path': {}, 'status': ''}
+
+    # webdriberのセットアップ
+    driver = setup_webdriver()
+    time.sleep(1)
+    # トップ画面に遷移する
+    driver.get('https://folio-sec.com/')
+    # ログインして会員用トップ画面に遷移する
+    login(driver, FOLIO_MAIL, FOLIO_PASS)
+    time.sleep(1)
+
+    # 財産管理トップ画面へ遷移する。
+    driver.get('https://folio-sec.com/mypage/assets')
+    # グラフの画像を保存する。
+    result['path']['theme'] = capture_screenshot_by_xpath(
+        driver, '//*[@id="portal-target"]/main/section/section[1]')
+
+    # おまかせの資産画面へ遷移する。
+    driver.get('https://folio-sec.com/mypage/assets/omakase')
+    # グラフの画像を保存する。
+    result['path']['roboad'] = capture_screenshot_by_xpath(
+        driver, '//*[@id="portal-target"]/main/section/section[1]')
+
+    result['status'] = 'OK'
+    print('[info] fetched roboad transition graph: '.format(result))
+
+    driver.quit()
+
+    return result
 
 
 def setup_webdriver():
@@ -264,3 +300,15 @@ def get_roboad_previous_day(driver):
     previous_day['amount'] = amount
 
     return previous_day
+
+
+def capture_screenshot_by_xpath(driver, xpath):
+
+    now = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S_%f')
+    filepath = './tmp/selenium_screenshot_{}.png'.format(now)
+
+    png = driver.find_element_by_xpath(xpath).screenshot_as_png
+    with open(filepath, 'wb') as f:
+        f.write(png)
+
+    return filepath

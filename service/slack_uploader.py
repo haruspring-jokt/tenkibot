@@ -9,7 +9,13 @@ import os
 slack_token = os.environ['SLACKBOT_API_TOKEN']
 
 
-def upload_image(filepath, channels, initial_comment=None, title='uploaded image'):
+def upload_image(filepath,
+                 channels,
+                 initial_comment=None,
+                 title='uploaded image',
+                 as_user=True,
+                 username='tenkibot',
+                 icon_emoji=':rainbow:'):
     """
     受け取ったファイルパスの画像をSlackチャネルにアップロードする。
     filepath: 投稿する画像のファイルパス
@@ -26,7 +32,10 @@ def upload_image(filepath, channels, initial_comment=None, title='uploaded image
             channels=channels,
             file=img_content,
             title=title,
-            initial_comment=initial_comment)
+            initial_comment=initial_comment,
+            as_user=as_user,
+            username=username,
+            icon_emoji=icon_emoji)
 
     if result['ok'] == True:
         print('[info] graph image uploaded. channel=[{0}]'.format(channels))

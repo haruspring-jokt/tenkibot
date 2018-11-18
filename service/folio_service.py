@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from repository import folio_repository
-from service import slack_messenger
+from service import slack_messenger, slack_uploader, os_manager
 
 
 def send_folio_sammary(channel):
@@ -111,3 +111,49 @@ def send_folio_roboad(channel):
 
     print('[info] message is posted. ch:[{ch}] message:[{me}]'.format(
         ch=channel, me=post_message[:10]))
+
+
+def send_folio_detail(channel):
+    """FOLIO グラフ画像の通知
+
+    Arguments:
+        channel {str} -- チャンネルID
+    """
+
+    print('[info] called service method. name=[send_folio_detail]')
+
+    # 投稿する画像をそれぞれ取得して保存する
+    # ファイルパスを辞書型で返してもらう
+    result = folio_repository.fetch_graph_images()
+
+    if result['status'] == 'NG':
+        post_message = '```データの取得に失敗しました```'
+        slack_messenger.post(post_message, channel)
+
+    # 画像を投稿する（テーマの資産）
+    slack_uploader.upload_image(
+        result['path']['theme'],
+        channel,
+        initial_comment='取得元: https://folio-sec.com/mypage/assets',
+        title='transition graph about theme assets.',
+        as_user=False,
+        icon_emoji=':moneybag:',
+        username='foliobot'
+    )
+
+    # 画像を投稿する（おまかせの資産）
+    slack_uploader.upload_image(
+        result['path']['roboad'],
+        channel,
+        initial_comment='取得元: https://folio-sec.com/mypage/assets/omakase',
+        title='transition graph about roboad assets.',
+        as_user=False,
+        icon_emoji=':moneybag:',
+        username='foliobot'
+    )
+
+    # アップロード完了後画像を削除する
+    os_manager.remove_file(result['path']['theme'])
+    os_manager.remove_file(result['path']['roboad'])
+
+    print('[info] finish service method. name=[send_folio_detail]')

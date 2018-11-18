@@ -17,9 +17,7 @@ def post_folio_summary(message):
     Arguments:
         message {message} -- Slack上で取得したメッセージなど
     """
-    # message.send("```folio```")
     print('[info] listen to message. text=[{0}],'.format(message.body['text']))
-    # message.send('{}'.format("FOLIOから資産概要を取得します…"))
     channel = message.body['channel']
     slack_messenger.post(
         "FOLIOから資産概要を取得します…",
@@ -28,3 +26,24 @@ def post_folio_summary(message):
         icon_emoji=':moneybag:',
         username='foliobot')
     folio_service.send_folio_sammary(channel)
+
+
+@listen_to(r"^folio\s(-g|--graph)$")
+def post_dolio_detail(message, option):
+    """FOLIOのWebページからすべてのテーマ・おまかせ投資それぞれのグラフの画像を取得し表示する。
+    コマンド: "folio [-g|--graph]"
+
+    Arguments:
+        message {message} -- Slack上で取得したmessage
+        option {str} -- オプション文字列
+    """
+    print('[info] listen to message. text=[{0}],'.format(message.body['text']))
+    channel = message.body['channel']
+    slack_messenger.post(
+        "FOLIOから資産推移のグラフを取得します…",
+        channel,
+        as_user=False,
+        icon_emoji=':moneybag:',
+        username='foliobot'
+    )
+    folio_service.send_folio_detail(channel)
