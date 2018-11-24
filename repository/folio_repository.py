@@ -6,11 +6,12 @@ import os
 import time
 import re
 import datetime
+import slackbot_settings as settings
 
-CHROME_BINARY_LOCATION = os.environ['CHROME_BINARY_LOCATION']
-CHROME_DRIVER_PATH = os.environ['CHROME_DRIVER_PATH']
-FOLIO_MAIL = os.environ['FOLIO_MAIL']
-FOLIO_PASS = os.environ['FOLIO_PASS']
+CHROME_BINARY_LOCATION = settings.CHROME_BINARY_LOCATION
+CHROME_DRIVER_PATH = settings.CHROME_DRIVER_PATH
+FOLIO_MAIL = settings.FOLIO_MAIL
+FOLIO_PASS = settings.FOLIO_PASS
 
 
 def fetch_sammary():
@@ -181,6 +182,8 @@ def login(driver, mailadress, password):
     )
     element.click()
 
+    return driver
+
 
 def get_total(driver):
     element = driver.find_element_by_xpath(
@@ -312,3 +315,51 @@ def capture_screenshot_by_xpath(driver, xpath):
         f.write(png)
 
     return filepath
+
+
+def fetch_daily_data():
+
+    driver = setup_webdriver()
+    time.sleep(1)
+
+    driver.get('https://folio-sec.com/')
+    login(driver, FOLIO_MAIL, FOLIO_PASS)
+    time.sleep(1)
+
+    driver.get('https://folio-sec.com/mypage/assets')
+
+    sammary = {}
+
+    sammary['total'] = get_total(driver)
+    sammary['gains'] = get_gains(driver)
+    sammary['previous_day'] = get_previous_day(driver)
+
+    sammary['status'] = 'OK'
+    print(f'[info] fetched summary data: {sammary}')
+
+    time.sleep(1)
+
+    theme = {}
+
+    theme['deposit'] = get_theme_deposit(driver)
+    theme['gains'] = get_theme_gains(driver)
+    theme['previous_day'] = get_theme_previous_day(driver)
+
+    theme['status'] = 'OK'
+    print(f'[info] fetched summary data: {theme}')
+
+    driver.get('https://folio-sec.com/mypage/assets/omakase')
+    time.sleep(1)
+
+    roboad = {}
+
+    roboad['deposit'] = get_roboad_deposit(driver)
+    roboad['gains'] = get_roboad_gains(driver)
+    roboad['previous_day'] = get_roboad_previous_day(driver)
+
+    roboad['status'] = 'OK'
+    print(f'[info] fetched roboad data: {roboad}')
+
+    driver.quit()
+
+    return sammary, theme, roboad
