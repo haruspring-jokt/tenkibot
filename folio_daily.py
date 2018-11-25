@@ -14,7 +14,7 @@ def run():
     timestamp = datetime.datetime.now()
     print('[info] {0} foliodaily is running.'.format(timestamp))
 
-    channel = slackbot_settings.CHANNEL_9_TEST
+    channel = slackbot_settings.DEFAULT_CHANNEL
 
     folio_service.post_daily_folio_notify(channel)
 

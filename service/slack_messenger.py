@@ -5,11 +5,16 @@ Slackへメッセージを投稿するモジュール
 
 from slackclient import SlackClient
 import os
+import slackbot_settings as settings
 
-SLACK_TOKEN = os.environ['SLACKBOT_API_TOKEN']
+SLACK_TOKEN = settings.API_TOKEN
 
 
-def post(message, channel, as_user=True, username='tenkibot', icon_emoji=':rainbow:'):
+def post(message,
+         channel,
+         as_user=True,
+         username='tenkibot',
+         icon_emoji=':rainbow:'):
     """
     Slackチャネルにテキストメッセージを投稿する。
     """
@@ -21,4 +26,22 @@ def post(message, channel, as_user=True, username='tenkibot', icon_emoji=':rainb
         text=message,
         as_user=as_user,
         username=username,
+        icon_emoji=icon_emoji)
+
+
+def post_attachment(attachments,
+                    channel,
+                    as_user=True,
+                    username='tenkibot',
+                    icon_emoji=':rainbow:'):
+    """Slackチャネルにattachment形式で投稿する。
+    """
+    sc = SlackClient(SLACK_TOKEN)
+
+    sc.api_call(
+        'chat.postMessage',
+        channel=channel,
+        attachments=attachments,
+        as_user=as_user,
+        usernae=username,
         icon_emoji=icon_emoji)

@@ -7,7 +7,7 @@
 from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 from slackbot.bot import default_reply
-from service import tenkibot_service
+from service import tenkibot_service, slack_messenger
 
 
 @listen_to(r"^tenki\s-h|--help$")
@@ -24,24 +24,45 @@ def post_not_found_city(message):
     message.send("```都市名が間違っています```")
 
 
-@listen_to(r"^tenki\s(-c\s|--current\s)(.*)$")
+@listen_to(r"^tenki\s(-o\s|--old\s)(.*)$")
 def post_current_weather_data_with_option(message, option, city_name):
     """
     指定された都市に関する現在の天気を表示する。
-    コマンド: "tenki [-c cityname|--current cityname]"
+    コマンド: "tenki [-o cityname|--old cityname]"
+    attachmentsを使用せずプレーンテキストとして投稿する（非推奨）
     """
     post_message = tenkibot_service.make_current_weather_message(city_name)
     message.send('{}'.format(post_message))
+
+
+# @listen_to(r"^tenki\s([^-].*)$")
+# def post_current_weather_data(message, city_name):
+#     """
+#     指定された都市に関する現在の天気を表示する。
+#     コマンド: "tenki [cityname]"
+#     """
+#     post_message = tenkibot_service.make_current_weather_message(city_name)
+#     message.send('{}'.format(post_message))
+
+
+@listen_to(r"^tenki\s(-c\s|--current\s)(.*)$")
+def post_current_weather_data_attachments_with_option(message, option, city_name):
+    """指定された都市に関する現在の天気をattachment形式で表示する。
+    コマンド: 'tenki [-c cityname|--c cityname]'
+    """
+    attachments = tenkibot_service.make_current_weather_attachments(city_name)
+    channel = message.body['channel']
+    slack_messenger.post_attachment(attachments, channel)
 
 
 @listen_to(r"^tenki\s([^-].*)$")
-def post_current_weather_data(message, city_name):
+def post_current_weather_data_attachments(message, city_name):
+    """指定された都市に関する現在の天気をattachment形式で表示する。
+    コマンド: 'tenki [cityname]'
     """
-    指定された都市に関する現在の天気を表示する。
-    コマンド: "tenki [cityname]"
-    """
-    post_message = tenkibot_service.make_current_weather_message(city_name)
-    message.send('{}'.format(post_message))
+    attachments = tenkibot_service.make_current_weather_attachments(city_name)
+    channel = message.body['channel']
+    slack_messenger.post_attachment(attachments, channel)
 
 
 @listen_to(r"^tenki\s(-5\s|--five\s)(.*)$")

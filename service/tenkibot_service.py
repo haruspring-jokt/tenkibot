@@ -200,3 +200,112 @@ def create_5_days_forecast_message(data):
         id=city_id)
 
     return post_message
+
+
+def make_current_weather_attachments(city_name):
+
+    # openweathermapから現在の天気データを取得する
+    data = openweathermap.fetch_current_weather_data(city_name)
+
+    # attachmentsの編集
+    attachments = []
+
+    # 天気データを投稿用メッセージに編集
+    # 雨または雪の場合は降水量、降雪量を追加する
+    attachment = create_current_weather_attachments(data)
+
+    attachments.append(attachment)
+
+    # attachmentsのリターン
+    return attachments
+
+
+def create_current_weather_attachments(data):
+
+    attachment = {}
+
+    if cod_check(data) == '404':
+        attachment['text'] = '```都市名が間違っています!```'
+        attachment['mrkdwn_in'] = ['text']
+        return attachment
+
+    # jsonから取得
+    weather = data['weather'][0]
+    weather_id = str(weather['id'])
+    weather_main = weather['main']
+    weather_description = weather['description']
+
+    # サムネイル用アイコンの取得
+    icon = weather['icon']
+    thumb_url = f'https://openweathermap.org/img/w/{icon}.png'
+
+    # 温度・湿度
+    main = data['main']
+    main_temp = main['temp']
+    main_humidity = main['humidity']
+
+    # 天気データの取得日次
+    dt_unix = data['dt']
+    dt_formatted_utf = datetime.datetime.fromtimestamp(dt_unix).strftime(
+        '%m/%d %H:%M:%S')
+
+    # 都市に関する情報
+    city_name = data['name']
+    city_id = data['id']
+
+    # 投稿用textの編集
+    text = f'天気: {weather_description}\n気温: {main_temp}℃\n湿度: {main_humidity}%\n'
+
+    # 雨の場合はtextに降水量を追加
+    if 'rain' in data:
+        rain_3h = round(data['rain']['3h'], 2)
+        text += f'降水量（3時間あたり）: {rain_3h}％'
+
+    # 雪の場合はtextに降雪量を追加
+    if 'snow' in data:
+        snow_3h = round(data['snow']['3h'], 2)
+        text += f'降雪量（3時間あたり）: {snow_3h}％'
+
+    # condition codeからattachmentのcolorを選択
+    # condirion codeについては https://openweathermap.org/weather-conditions を参照
+    code = weather_id[0]
+    # 晴天
+    if weather_id == '800':
+        color = '#FF9900'
+    # 曇り
+    elif code == '7' or code == '8':
+        color = '#BEC3C8'
+    # 雷
+    elif code == '2':
+        color = '#FAF500'
+    # 雨（霧雨含む）
+    elif code == '3' or code == '5':
+        color = '#0041FF'
+    # 雪
+    elif code == '6':
+        color = '#C800FF'
+
+    # 固定のattachment要素
+    author_name = 'openweathermap.org'
+    author_link = 'https://openweathermap.org/'
+    author_icon = 'https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/icons/favicon.ico'
+    created_by = 'https://github.com/haruspring-jokt/tenkibot'
+    footer_icon = 'https://avatars0.githubusercontent.com/u/26742523?s=400&u=18055b920a2a9e20f62d0e443c96295fcc441811&v=4'
+
+    # attachmentの編集
+    attachment['fallback'] = f'{city_name}の天気: {weather_description}'
+    attachment['color'] = f'{color}'
+    attachment['pretext'] = f'現在の *{city_name}* の天気を表示します。'
+    attachment['author_name'] = author_name
+    attachment['author_link'] = author_link
+    attachment['author_link'] = author_icon
+    attachment[
+        'title'] = f'Current weather in {city_name} (acquired at {dt_formatted_utf})'
+    attachment['title_link'] = f'https://openweathermap.org/city/{city_id}'
+    attachment['text'] = text
+    attachment['thumb_url'] = f'https://openweathermap.org/img/w/{icon}.png'
+    attachment['footer'] = f'created by {created_by}'
+    attachment['footer_icon'] = footer_icon
+    attachment['mrkdwn_in'] = ['pretext', 'text']
+
+    return attachment

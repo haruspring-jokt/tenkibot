@@ -7,8 +7,9 @@ import requests
 import json
 import re
 import os
+import slackbot_settings as settings
 
-OWM_API_KEY = os.environ['OWM_API_KEY']
+OWM_API_KEY = settings.OWM_API_TOKEN
 
 
 def fetch_current_weather_data(city_name, lang='ja', units='metric'):
