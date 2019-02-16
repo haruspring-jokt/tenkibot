@@ -2,4 +2,4 @@ import os
 
 def remove_file(path):
     os.remove(path)
-    print('[info] graph image removed.')
+    print(f'[info] image removed. path=[{path}]')

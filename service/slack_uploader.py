@@ -38,6 +38,6 @@ def upload_image(filepath,
             icon_emoji=icon_emoji)
 
     if result['ok'] == True:
-        print('[info] graph image uploaded. channel=[{0}]'.format(channels))
+        print(f'[info] image uploaded. channel=[{channels}], image=[{filepath}]')
     else:
         return False

@@ -13,8 +13,8 @@ SLACK_TOKEN = settings.API_TOKEN
 def post(message,
          channel,
          as_user=True,
-         username='tenkibot',
-         icon_emoji=':rainbow:'):
+         username='秘書',
+         icon_emoji=':secretary:'):
     """
     Slackチャネルにテキストメッセージを投稿する。
     """
@@ -32,8 +32,8 @@ def post(message,
 def post_attachment(attachments,
                     channel,
                     as_user=True,
-                    username='tenkibot',
-                    icon_emoji=':rainbow:'):
+                    username='秘書',
+                    icon_emoji=':secretary:'):
     """Slackチャネルにattachment形式で投稿する。
     """
     sc = SlackClient(SLACK_TOKEN)

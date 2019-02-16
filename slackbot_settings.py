@@ -33,3 +33,12 @@ FOLIO_MAIL = os.environ['FOLIO_MAIL']
 
 # https://folio-sec.com/ ログイン用パスワード
 FOLIO_PASS = os.environ['FOLIO_PASS']
+
+# 新日本プロレス関係の投稿先チャンネル
+NJPW_POST_CHANNEL = 'njpw'
+
+# 新日本プロレスモバイルサイト ログイン用メールアドレス
+NJPW_MAIL = os.environ['NJPW_MAIL']
+
+# 新日本プロレスモバイルサイト ログイン用パスワード
+NJPW_PASS = os.environ['NJPW_PASS']

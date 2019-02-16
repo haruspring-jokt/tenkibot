@@ -13,8 +13,7 @@ numpy==1.15.3
 pylint==2.1.1
 pyparsing==2.3.0
 python-dateutil==2.7.5
-requests==2.20.0
-# #4 heroku上での動作不具合対策
+requests==2.21.0
 selenium==3.8.0
 six==1.11.0
 slackbot==0.5.3
