@@ -13,7 +13,7 @@ RUN_FLUG = True
 def run():
 
     timestamp = datetime.datetime.now()
-    print(f'[info] {timestamp} foliodaily is running.')
+    print(f'[info] {timestamp} njpw_daily is running.')
 
     # 投稿先チャンネル
     channel = slackbot_settings.NJPW_POST_CHANNEL

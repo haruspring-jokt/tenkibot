@@ -30,11 +30,11 @@ def fetch_daily_data():
     # ログイン処理
     element = driver.find_element_by_xpath(
         '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/dl[1]/dd/input')
-    element.send_keys('dpa4o13@yahoo.com')
+    element.send_keys(settings.NJPW_MAIL)
 
     element = driver.find_element_by_xpath(
         '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/dl[2]/dd/input')
-    element.send_keys('cadence534')
+    element.send_keys(settings.NJPW_PASS)
 
     element = driver.find_element_by_xpath(
         '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/p/input')
