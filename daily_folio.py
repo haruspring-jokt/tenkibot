@@ -6,11 +6,13 @@ import datetime
 from service import folio_service, slack_messenger
 import slackbot_settings
 
+RUN_FLUG = False
+
 
 def run():
     """日次FOLIO通知サービスを呼び出す。
     """
-    # test
+
     timestamp = datetime.datetime.now()
     print('[info] {0} foliodaily is running.'.format(timestamp))
 
@@ -20,4 +22,5 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    if RUN_FLUG:
+        run()
