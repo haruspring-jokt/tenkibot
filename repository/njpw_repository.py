@@ -51,7 +51,7 @@ def fetch_daily_data():
     driver.get('https://sp.njpw.jp/')
 
     # 日記の一番上（最新）へ
-    element = driver.find_element_by_xpath('//*[@id="home"]/div[4]/div[2]/a')
+    element = driver.find_element_by_xpath('//*[@id="home"]/div[4]/div[2]')
     element.click()
 
     # 日記テキストを取得
