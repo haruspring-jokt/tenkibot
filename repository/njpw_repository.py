@@ -1,22 +1,38 @@
 # coding: utf-8
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from service.util import selenium_service
 import slackbot_settings as settings
-import os
 import time
-import re
 import datetime
 import requests
 import shutil
 
 
-
 def setup_webdriver():
     driver = selenium_service.setup_webdriver(is_mobile=True)
     return driver
+
+
+def login(driver, mailadress, password):
+    # ログイン処理
+    element = driver.find_element_by_xpath(
+        '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/dl[1]/dd/input')
+    element.send_keys(mailadress)
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/dl[2]/dd/input')
+    element.send_keys(password)
+
+    element = driver.find_element_by_xpath(
+        '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/p/input')
+    element.click()
+
+    # ログイン確認
+    element = driver.find_element_by_xpath(
+        '//*[@id="join"]/h2'
+    )
+    assert element.text == 'ログイン完了' , 'Error! ログイン失敗'
 
 
 def fetch_daily_data():
@@ -27,27 +43,15 @@ def fetch_daily_data():
 
     time.sleep(3)
 
-    # ログイン処理
-    element = driver.find_element_by_xpath(
-        '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/dl[1]/dd/input')
-    element.send_keys(settings.NJPW_MAIL)
+    login(driver, settings.NJPW_MAIL, settings.NJPW_PASS)
 
-    element = driver.find_element_by_xpath(
-        '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/dl[2]/dd/input')
-    element.send_keys(settings.NJPW_PASS)
-
-    element = driver.find_element_by_xpath(
-        '//*[@id="mw_wp_form_mw-wp-form-61300"]/form/div/p/input')
-    element.click()
-
-    time.sleep(3)
+    time.sleep(1)
 
     # トップページへ
     driver.get('https://sp.njpw.jp/')
 
     # 日記の一番上（最新）へ
-    element = driver.find_element_by_xpath(
-        '//*[@id="home"]/div[4]/div[2]/a/dl')
+    element = driver.find_element_by_xpath('//*[@id="home"]/div[4]/div[2]/a')
     element.click()
 
     # 日記テキストを取得
