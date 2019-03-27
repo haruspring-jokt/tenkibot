@@ -43,5 +43,5 @@ def post_attachment(attachments,
         channel=channel,
         attachments=attachments,
         as_user=as_user,
-        usernae=username,
+        username=username,
         icon_emoji=icon_emoji)

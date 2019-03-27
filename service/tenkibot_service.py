@@ -298,7 +298,7 @@ def create_current_weather_attachments(data):
     attachment['pretext'] = f'現在の *{city_name}* の天気を表示します。'
     attachment['author_name'] = author_name
     attachment['author_link'] = author_link
-    attachment['author_link'] = author_icon
+    attachment['author_icon'] = author_icon
     attachment[
         'title'] = f'Current weather in {city_name} (acquired at {dt_formatted_utf})'
     attachment['title_link'] = f'https://openweathermap.org/city/{city_id}'
