@@ -11,8 +11,8 @@ from service.htb import htb_service
 
 @listen_to(r'^htb$')
 @listen_to(r'^hatebu$')
-@listen_to(r'^はて[ぶ|ブ|なブックマーク]$')
-def post_htb_hotentry(message):
+@listen_to(r'^はて(ぶ|ブ|な|なブックマーク)$')
+def post_htb_hotentry(message, *args):
 
     print(f'[info] listen to message. text=[{message.body["text"]}]')
     channel = message.body['channel']

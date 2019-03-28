@@ -21,14 +21,9 @@ def send_htb_hotentry(channel):
     # NGエントリを除外する
     comp_list, ng_count = exclude_ng_entry(hotentry_list)
 
+    # 投稿用attachmentsを作成する
     attachments = []
-
-    # 投稿用attachmentを作成する
     attachment = make_attachment(comp_list, ng_count)
-    print('end make attatchment')
-
-    print(attachment)
-
     attachments.append(attachment)
 
     # slackチャンネルに投稿する
@@ -73,35 +68,41 @@ def exclude_ng_entry(entry_list):
     return entry_list, ng_count
 
 
-def make_attachment(entry_list, ng_count):
+def make_attachment(
+        entry_list,
+        ng_count,
+        color='good',
+        author_name='b.hatena.ne.jp',
+        author_link='http://b.hatena.ne.jp/',
+        author_icon='http://b.hatena.ne.jp/favicon.ico',
+        title_link='http://b.hatena.ne.jp/hotentry/all',
+        footer='created by https://github.com/haruspring-jokt/tenkibot',
+        footer_icon='https://avatars0.githubusercontent.com/u/26742523?s=400&u=18055b920a2a9e20f62d0e443c96295fcc441811&v=4'
+):
 
-    # textを作成する
-    text = ''
+    # fieldsを作成する
+    fields = []
+    for e in entry_list:
+        field = {'title': e['title'], 'value': e['href'], 'short': False}
+        fields.append(field)
 
-    attachment = {}
-
-    author_name = 'b.hatena.ne.jp'
-    author_link = 'http://b.hatena.ne.jp/'
-    author_icon = 'http://b.hatena.ne.jp/favicon.ico'
+    dt = datetime.datetime.now().strftime("%m/%d %H:%M")
 
     # attachmentの編集
-    attachment[
-        'fallback'] = f'{datetime.datetime.now().strftime("%m/%d %H:%M")}のホットエントリ(除外件数: {ng_count}件)'
-    attachment['color'] = 'good'
+    attachment = {}
+
+    attachment['fallback'] = f'{dt}のホットエントリ (除外: {ng_count}件)'
+    attachment['color'] = color
     attachment['pretext'] = f'{ng_count}件のエントリがNG除外されました。'
 
     attachment['author_name'] = author_name
     attachment['author_link'] = author_link
     attachment['author_icon'] = author_icon
 
-    attachment[
-        'title'] = f'{datetime.datetime.now().strftime("%m/%d %H:%M")}のホットエントリ'
-    attachment['title_link'] = 'http://b.hatena.ne.jp/hotentry/all'
-    attachment['text'] = 'test message'
-    attachment[
-        'footer'] = 'created by https://github.com/haruspring-jokt/tenkibot'
-    attachment[
-        'footer_icon'] = 'https://avatars0.githubusercontent.com/u/26742523?s=400&u=18055b920a2a9e20f62d0e443c96295fcc441811&v=4'
-    attachment['mrkdwn_in'] = ['pretext', 'text']
+    attachment['title'] = f'{dt}のホットエントリ'
+    attachment['title_link'] = title_link
+    attachment['fields'] = fields
+    attachment['footer'] = footer
+    attachment['footer_icon'] = footer_icon
 
     return attachment
