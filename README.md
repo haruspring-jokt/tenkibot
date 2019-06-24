@@ -20,7 +20,10 @@ python-3.7.0
 ## 2.3. ライブラリ
 
 ```bash
+$ pip3 freeze
 astroid==2.0.4
+beautifulsoup4==4.7.1
+bs4==0.0.1
 certifi==2018.10.15
 chardet==3.0.4
 colorama==0.4.0
@@ -35,13 +38,14 @@ numpy==1.15.3
 pylint==2.1.1
 pyparsing==2.3.0
 python-dateutil==2.7.5
-requests==2.20.0
+requests==2.21.0
 selenium==3.8.0
 six==1.11.0
 slackbot==0.5.3
 slackclient==1.3.0
 slacker==0.9.65
-urllib3==1.24
+soupsieve==1.9
+urllib3==1.25.3
 websocket-client==0.44.0
 wrapt==1.10.11
 yapf==0.24.0
